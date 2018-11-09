@@ -1,0 +1,8 @@
+@import './partials/news-source/news-source';
+
+.news-source-list {
+  &__list {
+    height: 100vh;
+    padding: 20px 20px 20px 370px;
+  }
+}

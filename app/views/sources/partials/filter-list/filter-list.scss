@@ -1,0 +1,12 @@
+@import './partials/filter/filter';
+
+.filter-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 350px;
+  padding: 20px;
+  background: #eaeff2;
+  overflow-y: auto;
+}
