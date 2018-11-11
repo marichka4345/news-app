@@ -1,0 +1,18 @@
+{{#each sources}}
+    <div class="news-source">
+        <div class="news-source__name">{{this.name}}</div>
+
+        <div class="news-source__info">
+            <div class="news-source__description">{{truncate this.description}}</div>
+            <div class="news-source__links">
+                <div class="news-source__link">
+                    <a href="{{this.url}}" target="__blank">Visit website</a>
+                </div>
+
+                <button class="news-source__link">
+                    <a href="/source-news">See news</a>
+                </button>
+            </div>
+        </div>
+    </div>
+{{/each}}

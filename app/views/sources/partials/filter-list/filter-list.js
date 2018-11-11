@@ -24,7 +24,7 @@ export class FilterList {
       );
       optionsElement.addEventListener(
         'click',
-        ({ target }) => this.toggleFilterAppliance(target)
+        this.toggleFilterAppliance
       );
     });
   };
@@ -42,7 +42,12 @@ export class FilterList {
     }
   };
 
-  toggleFilterAppliance = option => {
+  toggleFilterAppliance = ({ currentTarget, target }) => {
+    if (currentTarget === target) {
+      return;
+    }
+
+    const option = target;
     const optionAttribute = 'selected';
 
     const isSelected = getDataAttribute(option, optionAttribute) === 'true';
@@ -51,7 +56,7 @@ export class FilterList {
     const selectedTagsElement = option.parentElement.parentElement.querySelector('.filter__labels');
     if (!isSelected) {
       const element = document.createElement('div');
-      element.classList.add('filter__label');
+      element.className += ' filter__label';
       element.innerHTML = option.innerHTML;
       selectedTagsElement.appendChild(element);
     } else {

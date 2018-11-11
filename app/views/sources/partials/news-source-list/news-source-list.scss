@@ -1,8 +1,83 @@
-@import './partials/news-source/news-source';
+$source-bg: #83687B;
 
 .news-source-list {
-  &__list {
-    height: 100vh;
-    padding: 20px 20px 20px 370px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  height: 100vh;
+  padding: 20px 20px 20px 370px;
+}
+
+.news-source {
+  position: relative;
+  height: 200px;
+  width: 30%;
+  min-width: 200px;
+  display: inline-block;
+  margin-bottom: 20px;
+  background: $source-bg;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+
+  &__name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    font-size: 20px;
+    text-align: center;
+  }
+
+  &__info {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    padding: 8px;
+    background: white;
+    opacity: .7;
+    color: #adadad;
+    visibility: hidden;
+  }
+
+  &:hover {
+    .news-source{
+      &__info {
+        visibility: visible;
+      }
+
+      &__name {
+        opacity: .5;
+      }
+    }
+  }
+
+  &__description {
+    height: 150px;
+  }
+
+  &__links {
+    position: absolute;
+    bottom: 8px;
+    left: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  &__link {
+    display: inline-block;
+    padding: 0 8px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+
+    a {
+      color: $source-bg;
+      font-weight: 600;
+    }
   }
 }

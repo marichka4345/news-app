@@ -1,3 +1,15 @@
 {{#each filters}}
-    {{> partials/filter/filter this}}
+    <div class="filter">
+        <div class="filter__criteria" data-open="closed">
+            {{this.title}}
+        </div>
+
+        <div class="filter__options">
+            {{#each this.options}}
+                <div class="filter__option" data-selected="false">{{this}}</div>
+            {{/each}}
+        </div>
+
+        <div class="filter__labels"></div>
+    </div>
 {{/each}}
