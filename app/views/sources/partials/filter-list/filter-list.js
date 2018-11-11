@@ -1,6 +1,7 @@
 import { filtersData } from '../../../../constants/filters';
 import { getDataAttribute, setDataAttribute } from '../../../../utils/dataAttributes';
 import { renderTemplate } from '../../../../utils/templates';
+import { filters } from '../../../../services/filters';
 
 const template = require('./filter-list.handlebars');
 
@@ -53,20 +54,25 @@ export class FilterList {
     const isSelected = getDataAttribute(option, optionAttribute) === 'true';
     setDataAttribute(option, 'selected', String(!isSelected));
 
-    const selectedTagsElement = option.parentElement.parentElement.querySelector('.filter__labels');
+    const filterElement = option.parentElement.parentElement;
+    const { id } = filterElement;
+    const labelsElement = filterElement.querySelector('.filter__labels');
+
+    const filterValue = option.innerHTML;
+    const filter = { id, filterValue };
+
     if (!isSelected) {
-      const element = document.createElement('div');
-      element.className += ' filter__label';
-      element.innerHTML = option.innerHTML;
-      selectedTagsElement.appendChild(element);
+      renderTemplate(filterValue, labelsElement, 'filter__label');
+      filters.addFilter(filter);
     } else {
-      const selectedTags = Array.from(selectedTagsElement.children);
+      const labels = Array.from(labelsElement.children);
 
-      for (let i = 0; i < selectedTags.length; i++) {
-        const tag = selectedTags[i];
+      for (let i = 0; i < labels.length; i++) {
+        const label = labels[i];
 
-        if (tag.innerHTML === option.innerHTML) {
-          selectedTagsElement.removeChild(tag);
+        if (label.innerHTML === filterValue) {
+          labelsElement.removeChild(label);
+          filters.removeFilter(filter);
           break;
         }
       }

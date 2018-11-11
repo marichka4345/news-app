@@ -12,6 +12,14 @@ export const fetchSources = () => {
     });
 };
 
+export const getLocalSources = () => {
+  return JSON.parse(localStorage.getItem('sources'));
+};
+
+export const getSourcesLastDate = () => {
+  return new Date(localStorage.getItem('sources_date')).getTime();
+};
+
 export const fetchSourceNews = source => {
   return fetch(`https://newsapi.org/v2/top-headlines?sources=${source}&apiKey=abb27eb2154e472a8114c71c096b8a70`)
 };
