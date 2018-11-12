@@ -1,0 +1,1 @@
+export const SOURCES_PER_PAGE = 6;

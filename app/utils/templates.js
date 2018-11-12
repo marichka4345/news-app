@@ -4,3 +4,11 @@ export const renderTemplate = (template, root, className) => {
   div.innerHTML = template;
   root.appendChild(div);
 };
+
+export const rerenderTemplate = (component, root, className) => {
+  const element = document.querySelector(`.${className}`);
+  if (element) {
+    root.removeChild(element);
+  }
+  new component().render(root);
+};

@@ -1,2 +1,31 @@
 .pagination {
+  position: fixed;
+  bottom: 0;
+  left: 350px;
+  width: calc(100% - 350px);
+  background: #fff;
+  font-size: 24px;
+  z-index: 1;
+}
+
+.pages {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 350px;
+  margin: auto;
+
+  &__page {
+    cursor: pointer;
+
+    &--active {
+      text-decoration: underline;
+    }
+  }
+
+  &__navigation {
+    font-size: 30px;
+    cursor: pointer;
+    visibility: hidden;
+  }
 }

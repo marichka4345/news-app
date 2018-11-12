@@ -1,1 +1,13 @@
-Pagination
+<div class="pages">
+    <div class="pages__navigation">
+        &lsaquo;
+    </div>
+
+    {{#each range}}
+        <div class="pages__page">{{this}}</div>
+    {{/each}}
+
+    <div class="pages__navigation">
+        &rsaquo;
+    </div>
+</div>

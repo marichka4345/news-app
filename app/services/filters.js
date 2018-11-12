@@ -1,5 +1,5 @@
 import { sources } from './sources';
-import { NewsSourceList } from '../views/sources/partials';
+import { pagination } from './pagination';
 
 class Filters {
   constructor(){
@@ -20,16 +20,14 @@ class Filters {
     this.data[id].push(filterValue);
     this.sources.getFilteredData(this.data);
 
-    document.querySelector('.news-source-list').remove();
-    new NewsSourceList().render(document.body);
+    pagination.updatePageSourcesAfterFilter(1);
   };
 
   removeFilter = ({ id, filterValue }) => {
     this.data[id] = this.data[id].filter(item => item !== filterValue);
     this.sources.getFilteredData(this.data);
 
-    document.querySelector('.news-source-list').remove();
-    new NewsSourceList().render(document.body, );
+    pagination.updatePageSourcesAfterFilter(1);
   };
 }
 
