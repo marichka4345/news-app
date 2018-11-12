@@ -1,4 +1,5 @@
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
+import { PAGE_SIZE } from '../constants/news';
 
 const fetch = window.fetch || fetchPolyfill;
 
@@ -20,6 +21,44 @@ export const getSourcesLastDate = () => {
   return new Date(localStorage.getItem('sources_date')).getTime();
 };
 
-export const fetchSourceNews = source => {
-  return fetch(`https://newsapi.org/v2/top-headlines?sources=${source}&apiKey=abb27eb2154e472a8114c71c096b8a70`)
+export const fetchSourceNews = (source, page = '1') => {
+  if (!source) {
+    return;
+  }
+
+  return fetch(`https://newsapi.org/v2/everything?sources=${source}&page=${page}&apiKey=abb27eb2154e472a8114c71c096b8a70`)
+    .then(response => response.json())
+    .then(({ articles }) => {
+      const localNews = JSON.parse(localStorage.getItem(`articles-${source}`)) || [];
+
+      const newsData = localNews.length
+        ? [ ...localNews, ...articles ]
+        : articles;
+
+      const news = JSON.stringify(newsData);
+      localStorage.setItem(`articles-${source}`, news);
+      localStorage.setItem(`articles-${source}_date`, new Date().toString());
+      return newsData;
+    });
+};
+
+export const getLocalNews = (source, page = 1) => {
+  const localNews = localStorage.getItem(`articles-${source}`);
+
+  if (!localNews) {
+    return [];
+  }
+
+  const parsedNews = JSON.parse(localNews);
+  const startIndex = (page - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+
+  if (startIndex > parsedNews.length - 1) {
+    return [];
+  }
+  return parsedNews.slice(startIndex, endIndex);
+};
+
+export const getNewsLastDate = source => {
+  return new Date(localStorage.getItem(`articles-${source}_date`)).getTime();
 };

@@ -1,0 +1,32 @@
+.filtered-source-list {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 350px;
+  padding: 20px;
+  background: #eaeff2;
+  overflow-y: auto;
+}
+
+.filtered-source {
+  position: relative;
+  padding: 10px;
+  cursor: pointer;
+
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #cbd7df;
+  }
+
+  &--active {
+    background: #cbd7df;
+    color: #fff;
+  }
+}

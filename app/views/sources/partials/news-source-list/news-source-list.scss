@@ -69,7 +69,8 @@ $source-bg: #83687B;
     width: 100%;
   }
 
-  &__link {
+  &__link,
+  &__news-btn {
     display: inline-block;
     padding: 0 8px;
     background: transparent;

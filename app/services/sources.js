@@ -12,7 +12,7 @@ class Sources {
       Sources.instance = this;
     }
 
-    if ((new Date() - getSourcesLastDate()) / 60 >= 20 ) {
+    if ((new Date().getTime() - getSourcesLastDate()) / 60000 >= 20 ) {
       this.data = await fetchSources();
       this.filteredData = this.data;
       Sources.instance = this;
