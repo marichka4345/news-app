@@ -1,13 +1,13 @@
 <div class="pages">
-    <div class="pages__navigation">
+    <div class="pages__navigation pages__navigation--prev">
         &lsaquo;
     </div>
 
-    {{#each range}}
-        <div class="pages__page">{{this}}</div>
-    {{/each}}
+    <div class="pages__pages-list">
+        {{> partials/pages range=(json range)}}
+    </div>
 
-    <div class="pages__navigation">
+    <div class="pages__navigation pages__navigation--next">
         &rsaquo;
     </div>
 </div>

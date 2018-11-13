@@ -6,7 +6,7 @@ import { SOURCES_PER_PAGE } from '../constants/sources-pagination';
 class PaginationService {
   constructor(){
     if (!PaginationService.instance){
-      this.data = 1;
+      this.pageNumber = 1;
       this.pageSources = sources.filteredData ? sources.filteredData.slice(0, SOURCES_PER_PAGE) : [];
       PaginationService.instance = this;
     }
@@ -15,12 +15,20 @@ class PaginationService {
   }
 
   setCurrentPage = pageNumber => {
-    this.data = pageNumber;
+    this.pageNumber = pageNumber;
     this.updatePageSources();
   };
 
+  next = () => {
+    this.setCurrentPage(this.pageNumber + 1);
+  };
+
+  prev = () => {
+    this.setCurrentPage(this.pageNumber - 1);
+  };
+
   updatePageSources = startPage => {
-    const pageNumber = startPage || this.data;
+    const pageNumber = startPage || this.pageNumber;
     const startPosition = (pageNumber - 1) * SOURCES_PER_PAGE;
     this.pageSources = sources.filteredData.slice(startPosition, startPosition + SOURCES_PER_PAGE);
 
