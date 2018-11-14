@@ -1,75 +1,63 @@
-import { renderTemplate } from '../../../../utils/templates';
+import { renderTemplate } from '../../../../utils';
 import { news } from '../../../../services/news';
-import { fetchSourceNews, getLocalNews } from '../../../../utils/fetchData';
 
 const template = require('./source-news.handlebars');
+const newsItemTemplate = require('./partials/news-page.handlebars');
 
 import './source-news.scss';
 
+const loaderObserverOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 1.0
+};
+
 export class SourceNews {
-  prevY = 0;
   page = 1;
 
-  getTemplate = () => {
-    const newsData = news.data;
-    return newsData.length && news.source
-      ? template({ news: newsData })
-      : fetchSourceNews(news.source).then(news => template({ news }));
+  getTemplate = async () => {
+    const newsData = await news.getNews(1);
+    return template({ news: JSON.stringify(newsData) });
   };
 
   setup = () => {
-    const options = {
-      root: null,
-      rootMargin: '50px',
-      threshold: 1.0
-    };
-
     this.observer = new IntersectionObserver(
       this.handleObserver,
-      options
+      loaderObserverOptions
     );
 
     const loader = document.querySelector('.source-news__loader');
     this.observer.observe(loader);
   };
 
-  handleObserver = (entities, observer) => {
-    const y = entities[0].boundingClientRect.y;
+  handleObserver = (entities) => {
+    const entity = entities[0];
 
-    if (this.prevY > y) {
-      this.page = this.page + 1;
-      this.getNews(this.page, observer);
+    if  (!entity.isIntersecting) {
+      return;
     }
 
-    this.prevY = y;
+    this.page = this.page + 1;
+    this.getNews(this.page);
   };
 
-  getNews = async (page, observer) => {
+  getNews = async (page) => {
     const loader = document.querySelector('.source-news__loader');
+
     loader.style.visibility = 'visible';
-    const localNews = getLocalNews(news.source, page);
-
-    let newsData = localNews;
-
-    if (!localNews.length) {
-      await fetchSourceNews(news.source, page);
-      newsData = getLocalNews(news.source, page);
-    }
-
+    const newsData = await news.getNews(page);
     loader.style.visibility = 'hidden';
-    observer.unobserve(loader);
-    const newsElement = document.querySelector('.source-news');
-    newsElement.removeChild(loader);
 
-    document.querySelector('.source-news').insertAdjacentHTML( 'beforeend', template({ news: newsData }));
-    const newLoader = document.querySelector('.source-news__loader');
-    observer.observe(newLoader);
+    document.querySelector('.source-news__list').insertAdjacentHTML(
+      'beforeEnd',
+      newsItemTemplate({ news: newsData })
+    );
   };
 
-  render = async (rootElement) => {
-    const template = await this.getTemplate();
-    renderTemplate(template, rootElement, 'source-news');
-
-    this.setup();
+  render = rootElement => {
+    this.getTemplate().then(template => {
+      renderTemplate(template, rootElement, 'source-news');
+      this.setup();
+    });
   }
 }

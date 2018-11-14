@@ -1,28 +1,52 @@
-import { getLocalSources, getSourcesLastDate, fetchSources } from '../utils/fetchData';
-
-class Sources {
+class SourcesService {
   constructor(){
-    this.getInstance();
+    if (!SourcesService.instance){
+      SourcesService.instance = this;
+    }
+
+    return SourcesService.instance;
   }
 
-  getInstance = async () => {
-    if (!Sources.instance){
-      this.data = getLocalSources();
-      this.filteredData = this.data;
-      Sources.instance = this;
-    }
+  getSources = () => {
+    const localSources = this.getLocalSources();
+    const areSourcesUpdated =
+      (new Date().getTime() - this.getSourcesLastDate()) / 60000 < 20;
 
-    if ((new Date().getTime() - getSourcesLastDate()) / 60000 >= 20 ) {
-      this.data = await fetchSources();
-      this.filteredData = this.data;
-      Sources.instance = this;
-    }
-
-    return Sources.instance;
+    return localSources.length && areSourcesUpdated
+      ? Promise.resolve(localSources)
+      : this.fetchSources();
   };
 
-  getFilteredData = filters => {
-    let filteredData = this.data;
+  getFilteredSources = () => {
+    const { filteredSources } = this;
+    return filteredSources
+      ? Promise.resolve(filteredSources)
+      : this.getSources();
+  };
+
+  fetchSources = () => {
+    return fetch('https://newsapi.org/v2/sources?apiKey=abb27eb2154e472a8114c71c096b8a70')
+      .then(response => response.json())
+      .then(({ sources }) => {
+        localStorage.setItem('sources', JSON.stringify(sources));
+        localStorage.setItem('sources_date', new Date().toString());
+        return sources;
+      });
+  };
+
+  getLocalSources = () => {
+    const localSources = localStorage.getItem('sources');
+    return localSources
+      ? JSON.parse(localStorage.getItem('sources'))
+      : [];
+  };
+
+  getSourcesLastDate = () => {
+    return new Date(localStorage.getItem('sources_date')).getTime();
+  };
+
+  getFilteredData = async (filters) => {
+    let filteredData = await this.getSources();
     const filterIds = Object.keys(filters).filter(id => filters[id].length);
 
     filterIds.forEach(key => {
@@ -31,10 +55,11 @@ class Sources {
       );
     });
 
-    this.filteredData = filteredData;
+    this.filteredSources = filteredData;
+    return filteredData;
   };
 }
 
-const sources = new Sources();
+const sources = new SourcesService();
 
 export { sources };

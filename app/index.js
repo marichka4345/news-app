@@ -1,4 +1,5 @@
 import '@babel/polyfill';
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
 import * as Router from 'vanilla-router';
 
 import { Sources } from './views/sources/sources';
@@ -7,6 +8,10 @@ import { News } from './views/news/news';
 import { news } from './services/news';
 
 import './styles/index.scss';
+
+if (!window.fetch) {
+  window.fetch = fetchPolyfill;
+}
 
 const router = new Router();
 

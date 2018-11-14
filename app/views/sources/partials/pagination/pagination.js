@@ -1,10 +1,10 @@
-import { renderTemplate } from '../../../../utils/templates';
+import { renderTemplate } from '../../../../utils';
 import { sources } from '../../../../services/sources';
 import { pagination } from '../../../../services/pagination';
 import {
   MAX_PAGES_NUMBER,
   SOURCES_PER_PAGE
-} from '../../../../constants/sources-pagination';
+} from '../../../../constants';
 
 const template = require('./pagination.handlebars');
 const pagesTemplate = require('./partials/pages.handlebars');
@@ -14,7 +14,12 @@ import './_pagination.scss';
 const PAGE_CLASS_NAME = 'pages__page';
 
 export class Pagination {
-  count = Math.ceil(sources.filteredData.length / SOURCES_PER_PAGE);
+  getCount = async () => {
+    if (!this.count) {
+      const sourcesData = await sources.getFilteredSources();
+      this.count = Math.ceil(sourcesData.length / SOURCES_PER_PAGE);
+    }
+  };
 
   getTemplate = () => {
     return template({ range: JSON.stringify(this.range) });
@@ -136,7 +141,6 @@ export class Pagination {
     }
 
     prevButton.addEventListener('click', this.prevClickHandler);
-    console.log(pagination.pageNumber);
     if (pagination.pageNumber > 1) {
       prevButton.style.visibility = 'visible';
     }
@@ -164,7 +168,8 @@ export class Pagination {
     this.range = range;
   };
 
-  render(rootElement) {
+  render = async (rootElement) => {
+    await this.getCount();
     this.getRange();
     const template = this.getTemplate();
     renderTemplate(template, rootElement, 'pagination');

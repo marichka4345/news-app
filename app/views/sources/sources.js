@@ -4,6 +4,8 @@ export class Sources {
   children = [ FilterList, NewsSourceList, Pagination ];
 
   render (rootElement) {
-    this.children.forEach(component => new component().render(rootElement));
+    this.children.forEach(component => {
+      new component().render(rootElement);
+    });
   }
 }

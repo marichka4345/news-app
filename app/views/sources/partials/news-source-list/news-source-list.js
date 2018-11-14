@@ -1,19 +1,14 @@
-import { fetchSources } from '../../../../utils/fetchData';
-import { renderTemplate } from '../../../../utils/templates';
-import { sources } from '../../../../services/sources';
+import { getDataAttribute, renderTemplate } from '../../../../utils';
 import { pagination } from '../../../../services/pagination';
-import { getDataAttribute } from '../../../../utils/dataAttributes';
 
 const template = require('./news-source-list.handlebars');
 
 import './news-source-list.scss';
 
 export class NewsSourceList {
-  getTemplate = () => {
-    const sourcesData = sources.filteredData;
-    return sourcesData
-      ? template({ sources: pagination.pageSources })
-      : fetchSources().then(sources => template({sources}));
+  getTemplate = async () => {
+    const pageSources = await pagination.getPageSources();
+    return template({ sources: pageSources });
   };
 
   setupNewsSources = () => {
@@ -23,13 +18,14 @@ export class NewsSourceList {
 
   navigateToNews = e => {
     const sourceId = getDataAttribute(e.target, 'source');
-    window.router.navigateTo(`/news-source/${sourceId}`, { data: sources.filteredData });
+    window.router.navigateTo(`/news-source/${sourceId}`);
   };
 
-  render = async (rootElement) => {
-    const template = await this.getTemplate();
-    renderTemplate(template, rootElement, 'news-source-list');
+  render = rootElement => {
+    this.getTemplate().then(template => {
+      renderTemplate(template, rootElement, 'news-source-list');
 
-    this.setupNewsSources();
+      this.setupNewsSources();
+    });
   }
 }

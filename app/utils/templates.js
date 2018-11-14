@@ -1,4 +1,8 @@
 export const renderTemplate = (template, root, className) => {
+  if (root.querySelector(`.${className}`)) {
+    return;
+  }
+
   const div = document.createElement('div');
   div.className += className;
   div.innerHTML = template;

@@ -1,15 +1,14 @@
 import { sources } from './sources';
 import { pagination } from './pagination';
 
-class Filters {
+class FiltersService {
   constructor(){
-    if (!Filters.instance){
+    if (!FiltersService.instance){
       this.data = {};
-      this.sources = sources;
-      Filters.instance = this;
+      FiltersService.instance = this;
     }
 
-    return Filters.instance;
+    return FiltersService.instance;
   }
 
   addFilter = ({ id, filterValue }) => {
@@ -18,19 +17,21 @@ class Filters {
     }
 
     this.data[id].push(filterValue);
-    this.sources.getFilteredData(this.data);
 
-    pagination.updatePageSourcesAfterFilter(1);
+    sources.getFilteredData(this.data).then(() => {
+      pagination.updatePageSourcesAfterFilter();
+    });
   };
 
   removeFilter = ({ id, filterValue }) => {
     this.data[id] = this.data[id].filter(item => item !== filterValue);
-    this.sources.getFilteredData(this.data);
 
-    pagination.updatePageSourcesAfterFilter(1);
+    sources.getFilteredData(this.data).then(() => {
+      pagination.updatePageSourcesAfterFilter();
+    });
   };
 }
 
-const filters = new Filters();
+const filters = new FiltersService();
 
 export { filters };

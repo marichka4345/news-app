@@ -1,6 +1,7 @@
-import { filtersData } from '../../../../constants/filters';
-import { getDataAttribute, setDataAttribute } from '../../../../utils/dataAttributes';
-import { renderTemplate } from '../../../../utils/templates';
+import { filtersData } from '../../../../constants';
+import {
+  getDataAttribute, setDataAttribute, renderTemplate
+} from '../../../../utils';
 import { filters } from '../../../../services/filters';
 
 const template = require('./filter-list.handlebars');

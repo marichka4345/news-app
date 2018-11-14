@@ -1,46 +1,79 @@
-import {
-  fetchSourceNews,
-  getLocalNews,
-  getNewsLastDate
-} from '../utils/fetchData';
+import { PAGE_SIZE } from '../constants';
 
-const areNewsUpdated = source => {
-  const lastNewsFetchDate = getNewsLastDate(source);
-
-  return lastNewsFetchDate &&
-    (new Date().getTime() - getNewsLastDate(source)) / 60000 >= 20;
-};
-
-class News {
+class NewsService {
   constructor() {
-    if (!News.instance){
-      this.data = [];
-      News.instance = this;
+    if (!NewsService.instance){
+      NewsService.instance = this;
     }
 
-    return News.instance;
+    return NewsService.instance;
   }
 
-  setSource = async (source) => {
-    if (this.source !== source) {
-      this.source = source;
+  getNews = (page = 1) => {
+    const { source } = this;
+    const localNews = this.getLocalNews(source, page);
 
-      const isInLocalStorage = !!getLocalNews(source).length;
-
-      if (!isInLocalStorage || areNewsUpdated(source)) {
-        this.data = await fetchSourceNews(this.source);
-      } else {
-        this.data = getLocalNews(source);
-      }
-    }
+    return localNews.length && this.areNewsUpdated
+      ? Promise.resolve(localNews)
+      : this.fetchSourceNews(source, page);
   };
 
-  navigateToSourceNews = source => {
-    this.setSource(source)
-      .then(() => { window.router.navigateTo(`news-source/${source}`); });
+  fetchSourceNews = (source, page = 1) => {
+    if (!source) {
+      return;
+    }
+
+    return fetch(`https://newsapi.org/v2/everything?sources=${source}&page=${page}&apiKey=abb27eb2154e472a8114c71c096b8a70`)
+      .then(response => response.json())
+      .then(({ articles }) => {
+        const localNews = JSON.parse(localStorage.getItem(`articles-${source}`)) || [];
+
+        const newsData = localNews.length
+          ? [ ...localNews, ...articles ]
+          : articles;
+
+        const news = JSON.stringify(newsData);
+        localStorage.setItem(`articles-${source}`, news);
+        localStorage.setItem(`articles-${source}_date`, new Date().toString());
+        return articles;
+      });
+  };
+
+  getLocalNews = (source, page = 1) => {
+    const localNews = localStorage.getItem(`articles-${source}`);
+
+    if (!localNews) {
+      return [];
+    }
+
+    const parsedNews = JSON.parse(localNews);
+    const startIndex = (page - 1) * PAGE_SIZE;
+    const endIndex = startIndex + PAGE_SIZE;
+
+    if (startIndex > parsedNews.length - 1) {
+      return [];
+    }
+    return parsedNews.slice(startIndex, endIndex);
+  };
+
+  getNewsLastDate = source => {
+    return new Date(localStorage.getItem(`articles-${source}_date`)).getTime();
+  };
+
+  areNewsUpdated = source => {
+    const lastNewsFetchDate = this.getNewsLastDate(source);
+
+    return lastNewsFetchDate &&
+      (new Date().getTime() - this.getNewsLastDate(source)) / 60000 < 20;
+  };
+
+  setSource = source => {
+    if (this.source !== source) {
+      this.source = source;
+    }
   };
 }
 
-const news = new News();
+const news = new NewsService();
 
 export { news };

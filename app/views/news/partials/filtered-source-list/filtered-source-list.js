@@ -1,15 +1,14 @@
-import { renderTemplate } from '../../../../utils/templates';
+import { getDataAttribute, renderTemplate } from '../../../../utils';
 import { sources } from '../../../../services/sources';
 import { news } from '../../../../services/news';
-import { getDataAttribute } from '../../../../utils/dataAttributes';
 
 const template = require('./filtered-source-list.handlebars');
 
 import './filtered-source-list.scss';
 
 export class FilteredSourceList {
-  getTemplate = () => {
-    const filteredData = sources.filteredData;
+  getTemplate = async () => {
+    const filteredData = await sources.getFilteredSources();
     return template({ filteredData });
   };
 
@@ -41,14 +40,15 @@ export class FilteredSourceList {
       sourceElement.className += ' filtered-source--active';
 
       const sourceId = getDataAttribute(sourceElement, 'source');
-      news.navigateToSourceNews(sourceId);
+      window.router.navigateTo(`news-source/${sourceId}`);
     });
   };
 
   render = rootElement => {
-    const template = this.getTemplate();
-    renderTemplate(template, rootElement, 'filtered-source-list');
+    this.getTemplate().then(template => {
+      renderTemplate(template, rootElement, 'filtered-source-list');
 
-    this.setup();
+      this.setup();
+    });
   }
 }
