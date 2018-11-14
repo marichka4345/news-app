@@ -1,4 +1,5 @@
 import { fetchSourcesUrl } from '../constants';
+import { errors } from './errors';
 
 class SourcesService {
   constructor(){
@@ -29,11 +30,20 @@ class SourcesService {
   fetchSources = () => {
     return fetch(fetchSourcesUrl)
       .then(response => response.json())
-      .then(({ sources }) => {
+      .then((response) => {
+        if (response.status === 'error') {
+          throw new Error(response.message)
+        }
+
+        const { sources } = response;
         localStorage.setItem('sources', JSON.stringify(sources));
         localStorage.setItem('sources_date', new Date().toString());
         return sources;
-      });
+      })
+      .catch(error => {
+        errors.showError(error);
+        return [];
+      })
   };
 
   getLocalSources = () => {

@@ -1,4 +1,5 @@
-import { renderTemplate, setElementActiveClass } from '../../../../utils';
+import { renderTemplate } from '../../../../utils';
+import { setElementActiveClass } from '../../../../utils/templates';
 import { SORTING_INFO } from '../../../../constants';
 import { sorting } from '../../../../services/sorting';
 

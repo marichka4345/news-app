@@ -1,5 +1,6 @@
 import { PAGE_SIZE, SORTING_INFO } from '../constants';
 import { sorting } from './sorting';
+import { errors } from './errors';
 
 class NewsService {
   constructor() {
@@ -29,7 +30,12 @@ class NewsService {
 
     return fetch(fetchUrl)
       .then(response => response.json())
-      .then(({ articles }) => {
+      .then((response) => {
+        if (response.status === 'error') {
+          throw new Error(response.message)
+        }
+
+        const { articles } = response;
         const localNews = JSON.parse(localStorage.getItem(`articles-${source}`)) || [];
 
         const newsData = localNews.length
@@ -40,6 +46,10 @@ class NewsService {
         localStorage.setItem(`articles-${source}-by-${activeItem}`, news);
         localStorage.setItem(`articles-${source}-by-${activeItem}_date`, new Date().toString());
         return articles;
+      })
+      .catch(error => {
+        errors.showError(error);
+        return [];
       });
   };
 

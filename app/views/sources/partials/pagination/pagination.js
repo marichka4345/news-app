@@ -1,4 +1,5 @@
-import { renderTemplate, setElementActiveClass } from '../../../../utils';
+import { renderTemplate } from '../../../../utils';
+import { setElementActiveClass } from '../../../../utils/templates';
 import { sources } from '../../../../services/sources';
 import { pagination } from '../../../../services/pagination';
 import {
