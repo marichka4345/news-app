@@ -1,0 +1,22 @@
+.sorting-bar {
+  position: fixed;
+  top: 0;
+  left: 350px;
+  width: calc(100% - 350px);
+  padding: 20px;
+  background: #fff;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 1;
+
+  &__item {
+    display: inline-block;
+    margin-right: 30px;
+    cursor: pointer;
+
+    &--active {
+      border-bottom: 1px dashed #000;
+    }
+  }
+}

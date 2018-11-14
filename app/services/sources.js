@@ -1,3 +1,5 @@
+import { fetchSourcesUrl } from '../constants';
+
 class SourcesService {
   constructor(){
     if (!SourcesService.instance){
@@ -25,7 +27,7 @@ class SourcesService {
   };
 
   fetchSources = () => {
-    return fetch('https://newsapi.org/v2/sources?apiKey=abb27eb2154e472a8114c71c096b8a70')
+    return fetch(fetchSourcesUrl)
       .then(response => response.json())
       .then(({ sources }) => {
         localStorage.setItem('sources', JSON.stringify(sources));

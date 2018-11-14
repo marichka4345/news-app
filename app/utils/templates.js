@@ -16,3 +16,13 @@ export const rerenderTemplate = (component, root, className) => {
   }
   new component().render(root);
 };
+
+export const setElementActiveClass = (element, className) => {
+  const activeElementClassName = className + '--active';
+  const activeElement = document.querySelector(`.${activeElementClassName}`);
+
+  if (activeElement) {
+    activeElement.className = className;
+  }
+  element.className += ` ${activeElementClassName}`;
+};

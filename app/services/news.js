@@ -1,4 +1,5 @@
-import { PAGE_SIZE } from '../constants';
+import { PAGE_SIZE, SORTING_INFO } from '../constants';
+import { sorting } from './sorting';
 
 class NewsService {
   constructor() {
@@ -23,7 +24,10 @@ class NewsService {
       return;
     }
 
-    return fetch(`https://newsapi.org/v2/everything?sources=${source}&page=${page}&apiKey=abb27eb2154e472a8114c71c096b8a70`)
+    const { activeItem } = sorting;
+    const fetchUrl = SORTING_INFO[activeItem](source, page);
+
+    return fetch(fetchUrl)
       .then(response => response.json())
       .then(({ articles }) => {
         const localNews = JSON.parse(localStorage.getItem(`articles-${source}`)) || [];
@@ -33,20 +37,22 @@ class NewsService {
           : articles;
 
         const news = JSON.stringify(newsData);
-        localStorage.setItem(`articles-${source}`, news);
-        localStorage.setItem(`articles-${source}_date`, new Date().toString());
+        localStorage.setItem(`articles-${source}-by-${activeItem}`, news);
+        localStorage.setItem(`articles-${source}-by-${activeItem}_date`, new Date().toString());
         return articles;
       });
   };
 
   getLocalNews = (source, page = 1) => {
-    const localNews = localStorage.getItem(`articles-${source}`);
+    const { activeItem } = sorting;
+    const localNews = localStorage.getItem(`articles-${source}-by-${activeItem}`);
 
     if (!localNews) {
       return [];
     }
 
     const parsedNews = JSON.parse(localNews);
+
     const startIndex = (page - 1) * PAGE_SIZE;
     const endIndex = startIndex + PAGE_SIZE;
 
@@ -57,7 +63,8 @@ class NewsService {
   };
 
   getNewsLastDate = source => {
-    return new Date(localStorage.getItem(`articles-${source}_date`)).getTime();
+    const { activeItem } = sorting;
+    return new Date(localStorage.getItem(`articles-${source}-by-${activeItem}_date`)).getTime();
   };
 
   areNewsUpdated = source => {

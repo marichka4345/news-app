@@ -1,4 +1,4 @@
-import { renderTemplate } from '../../../../utils';
+import { renderTemplate, setElementActiveClass } from '../../../../utils';
 import { sources } from '../../../../services/sources';
 import { pagination } from '../../../../services/pagination';
 import {
@@ -28,13 +28,7 @@ export class Pagination {
   setActiveClass = page => {
     pagination.setCurrentPage(Number(page.innerHTML));
 
-    const activePageClassName = PAGE_CLASS_NAME + '--active';
-    const activePage = document.querySelector(`.${activePageClassName}`);
-
-    if (activePage) {
-      activePage.className = PAGE_CLASS_NAME;
-    }
-    page.className += ` ${activePageClassName}`;
+    setElementActiveClass(page, PAGE_CLASS_NAME);
   };
 
   pageClickHandler = ({ target }) => {

@@ -1,6 +1,7 @@
 .source-news {
-  height: 100vh;
-  padding: 20px 20px 20px 370px;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+  padding: 10px 20px 20px 370px;
   overflow-y: scroll;
 
   &__list {
