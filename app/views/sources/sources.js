@@ -1,7 +1,7 @@
-import { FilterList, NewsSourceList, Pagination } from './partials';
+import { FilterList, Pagination } from './partials';
 
 export class Sources {
-  children = [ FilterList, NewsSourceList, Pagination ];
+  children = [ FilterList, Pagination ];
 
   render (rootElement) {
     this.children.forEach(component => {

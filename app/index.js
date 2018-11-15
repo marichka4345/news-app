@@ -1,6 +1,5 @@
 import '@babel/polyfill';
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
-require('intersection-observer');
 
 import * as Router from 'vanilla-router';
 
@@ -15,6 +14,10 @@ if (!window.fetch) {
   window.fetch = fetchPolyfill;
 }
 
+if (!window.IntersectionObserver) {
+  require('intersection-observer');
+}
+
 const router = new Router();
 
 const rootElement = document.body;
@@ -26,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
       new Sources().render(rootElement);
     })
     .add('news-source/(:any)', source => {
+      console.log('in route 2');
       rootElement.innerHTML = '';
       news.setSource(source);
       new News().render(rootElement)

@@ -27,8 +27,6 @@ export class Pagination {
   };
 
   setActiveClass = page => {
-    pagination.setCurrentPage(Number(page.innerHTML));
-
     setElementActiveClass(page, PAGE_CLASS_NAME);
   };
 
@@ -123,10 +121,14 @@ export class Pagination {
 
     if (isFirstPageActive) {
       const firstPageNumber = document.querySelector('.pages__page');
+      const pageNumber = Number(firstPageNumber.innerHTML);
+      pagination.setCurrentPage(pageNumber);
       this.setActiveClass(firstPageNumber);
     } else {
       const pageElement = Array.from(document.querySelectorAll(`.${PAGE_CLASS_NAME}`))
         .filter(element => element.innerHTML === String(pagination.pageNumber))[0];
+      const pageNumber = Number(pageElement.innerHTML);
+      pagination.setCurrentPage(pageNumber);
       this.setActiveClass(pageElement);
     }
 

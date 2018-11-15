@@ -16,6 +16,7 @@ export class SourceNews {
   page = 1;
 
   getTemplate = async () => {
+    console.log('render');
     const newsData = await news.getNews(1);
     return template({ news: JSON.stringify(newsData) });
   };
@@ -72,6 +73,8 @@ export class SourceNews {
 
   getNews = async (page) => {
     const loader = document.querySelector('.source-news__loader');
+
+    console.log('in intersectionObserver');
 
     loader.style.visibility = 'visible';
     const newsData = await news.getNews(page);
