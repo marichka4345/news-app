@@ -63,7 +63,11 @@ export class FilterList {
     const filter = { id, filterValue };
 
     if (!isSelected) {
-      renderTemplate(filterValue, labelsElement, 'filter__label');
+      const label = document.createElement('div');
+      label.className = 'filter__label';
+      label.innerText = filterValue;
+      labelsElement.appendChild(label);
+
       filters.addFilter(filter);
     } else {
       const labels = Array.from(labelsElement.children);

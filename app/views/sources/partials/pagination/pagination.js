@@ -10,7 +10,7 @@ import {
 const template = require('./pagination.handlebars');
 const pagesTemplate = require('./partials/pages.handlebars');
 
-import './_pagination.scss';
+import './pagination.scss';
 
 const PAGE_CLASS_NAME = 'pages__page';
 

@@ -1,14 +1,14 @@
+@import '../../../../styles/mixins';
+
 .sorting-bar {
-  position: fixed;
+  @include right-column-element();
+
   top: 0;
-  left: 350px;
-  width: calc(100% - 350px);
+  height: 65px;
   padding: 20px;
-  background: #fff;
   font-size: 18px;
   text-transform: uppercase;
   letter-spacing: 1px;
-  z-index: 1;
 
   &__item {
     display: inline-block;

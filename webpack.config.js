@@ -15,7 +15,8 @@ const COMMON_CONFIG = {
   },
   output: {
     filename: '[name].[contenthash:6].js',
-    path: path.resolve(__dirname, 'dist')
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
   },
   plugins: [
     new CleanWebpackPlugin(['dist']),
@@ -78,7 +79,9 @@ const COMMON_CONFIG = {
 const DEV_CONFIG = {
   mode: 'development',
   devServer: {
-    overlay: true
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    historyApiFallback: true
   },
   plugins: [
     new webpack.NamedModulesPlugin()

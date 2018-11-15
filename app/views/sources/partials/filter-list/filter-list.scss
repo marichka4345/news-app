@@ -1,16 +1,10 @@
+@import '../../../../styles/mixins';
+
 $options-padding: 10px;
-$dark-grey: #cbd7df;
 $dark-brown: #ad3b16;
 
 .filter-list {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 350px;
-  padding: 20px;
-  background: #eaeff2;
-  overflow-y: auto;
+  @include left-column();
 }
 
 .filter {
@@ -75,7 +69,9 @@ $dark-brown: #ad3b16;
 
   &__option {
     margin-bottom: 6px;
+    padding-left: 10px;
     background: #f0f3f5;
+    transition: all .3s ease-in-out;
 
     &:first-child {
       margin-top: 10px;

@@ -1,5 +1,7 @@
 import '@babel/polyfill';
 import { fetch as fetchPolyfill } from 'whatwg-fetch';
+require('intersection-observer');
+
 import * as Router from 'vanilla-router';
 
 import { Sources } from './views/sources/sources';

@@ -1,4 +1,4 @@
-$source-bg: #83687B;
+@import '../../../../styles/variables';
 
 .news-source-list {
   display: flex;
@@ -16,7 +16,7 @@ $source-bg: #83687B;
   min-width: 200px;
   display: inline-block;
   margin-bottom: 20px;
-  background: $source-bg;
+  background: $source-card-bg;
   border-radius: 5px;
   color: #fff;
   cursor: pointer;
@@ -24,8 +24,8 @@ $source-bg: #83687B;
   &__name {
     position: absolute;
     top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    transform: translateY(-50%);
+    width: 100%;
     font-size: 20px;
     text-align: center;
   }
@@ -76,10 +76,21 @@ $source-bg: #83687B;
     background: transparent;
     border: none;
     font-size: 14px;
+    cursor: pointer;
 
-    a {
-      color: $source-bg;
-      font-weight: 600;
+    &:focus {
+      outline: none;
+    }
+
+    a,
+    span {
+      color: $source-card-bg;
+      text-decoration: none;
+      transition: opacity .2s ease-in;
+
+      &:hover {
+        opacity: .4;
+      }
     }
   }
 }

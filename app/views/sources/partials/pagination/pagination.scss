@@ -1,18 +1,17 @@
+@import '../../../../styles/mixins';
+
 .pagination {
-  position: fixed;
-  bottom: 0;
-  left: 350px;
-  width: calc(100% - 350px);
-  background: #fff;
+  @include right-column-element();
+
   font-size: 24px;
-  z-index: 1;
 }
 
 .pages {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 350px;
+  width: $sidebar-width;
   margin: auto;
 
   &__pages-list {
@@ -20,9 +19,11 @@
     justify-content: space-between;
     align-items: center;
     width: 250px;
+    margin: auto;
   }
 
   &__page {
+    display: inline-block;
     cursor: pointer;
 
     &--active {
@@ -31,8 +32,19 @@
   }
 
   &__navigation {
+    position: absolute;
+    top: -5px;
+    display: inline-block;
     font-size: 30px;
     cursor: pointer;
     visibility: hidden;
+
+    &--prev {
+      left: 0;
+    }
+
+    &--next {
+      right: 0;
+    }
   }
 }

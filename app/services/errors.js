@@ -18,10 +18,14 @@ class ErrorsService {
       document.body.appendChild(div);
     }
 
-    errorWrapper.insertAdjacentHTML('afterBegin', errorTemplate({ message }));
+    if (errorWrapper) {
+      errorWrapper.insertAdjacentHTML('afterBegin', errorTemplate({message}));
+    }
 
     setTimeout(() => {
-      errorWrapper.innerHTML = '';
+      if (errorWrapper) {
+        errorWrapper.innerHTML = '';
+      }
     }, 3000);
   };
 }
