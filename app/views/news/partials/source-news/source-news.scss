@@ -25,14 +25,46 @@
   }
 
   &__image-wrapper {
+    position: relative;
     height: 160px;
     width: 100%;
     margin-bottom: 20px;
     overflow: hidden;
+    background: gray;
+    text-align: center;
+
+    &:before {
+      content: '...';
+      position: absolute;
+      top: calc(50% - 20px);
+      width: 100%;
+      text-align: center;
+      display: block;
+      color: #fff;
+      letter-spacing: 3px;
+      font-size: 40px;
+      opacity: .5;
+    }
+
+    &--loaded {
+      background: #fff;
+
+      &:before {
+        content: '';
+        display: none;
+      }
+    }
   }
 
   &__image {
-    max-width: 100%;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+
+    &--loaded {
+      opacity: 1;
+    }
   }
 
   &__title {

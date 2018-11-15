@@ -1,7 +1,6 @@
 {{#each news}}
     <div class="source-news__news">
-        <div class="source-news__image-wrapper">
-            <img src="{{this.urlToImage}}" class="source-news__image" />
+        <div class="source-news__image-wrapper" data-src="{{this.urlToImage}}">
         </div>
         <div class="source-news__title">
             <a href="{{this.url}}" target="__blank">{{this.title}}</a>

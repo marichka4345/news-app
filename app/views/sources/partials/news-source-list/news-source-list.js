@@ -17,7 +17,7 @@ export class NewsSourceList {
   };
 
   navigateToNews = e => {
-    const sourceId = getDataAttribute(e.target, 'source');
+    const sourceId = getDataAttribute(e.currentTarget, 'source');
     window.router.navigateTo(`/news-source/${sourceId}`);
   };
 

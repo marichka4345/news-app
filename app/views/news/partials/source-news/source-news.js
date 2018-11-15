@@ -1,4 +1,4 @@
-import { renderTemplate } from '../../../../utils';
+import { getDataAttribute, renderTemplate } from '../../../../utils';
 import { news } from '../../../../services/news';
 
 const template = require('./source-news.handlebars');
@@ -21,6 +21,8 @@ export class SourceNews {
   };
 
   setup = () => {
+    this.displayImagesOnLoad();
+
     this.observer = new IntersectionObserver(
       this.handleObserver,
       loaderObserverOptions
@@ -28,6 +30,33 @@ export class SourceNews {
 
     const loader = document.querySelector('.source-news__loader');
     this.observer.observe(loader);
+  };
+
+  displayImagesOnLoad = () => {
+    const imageWrapperClassName = 'source-news__image-wrapper';
+    const imageClassName = 'source-news__image';
+
+    const imageWrappers = document.querySelectorAll(`.${imageWrapperClassName}`);
+
+    const imageOnLoadHandler = (e, wrapper) => {
+      e.target.className += ` ${imageClassName}--loaded`;
+      wrapper.className += ` ${imageWrapperClassName}--loaded`;
+
+      e.target.removeEventListener('load', imageOnLoadHandler);
+    };
+
+    Array.from(imageWrappers).forEach(wrapper => {
+      const src = getDataAttribute(wrapper, 'src');
+
+      const image = new Image();
+      image.src = src;
+      image.className = imageClassName;
+      image.addEventListener('load', e => imageOnLoadHandler(e, wrapper));
+
+      if (!wrapper.children.length) {
+        wrapper.appendChild(image);
+      }
+    });
   };
 
   handleObserver = (entities) => {
@@ -52,6 +81,7 @@ export class SourceNews {
       'beforeEnd',
       newsItemTemplate({ news: newsData })
     );
+    this.displayImagesOnLoad();
   };
 
   render = rootElement => {
